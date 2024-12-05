@@ -94,7 +94,18 @@ resource "aws_amplify_app" "example" {
   }
 }
 
-resource "aws_amplify_branch" "main" {
+resource "aws_amplify_domain_association" "example" {
   app_id      = aws_amplify_app.example.id
-  branch_name = "main"
+  domain_name = "iowattqa.com"
+
+  # https://www.example.com
+  sub_domain {
+    branch_name = "main"
+    prefix      = "store"
+  }
+
+  certificate_settings {
+    type = "CUSTOM"
+    custom_certificate_arn = "arn:aws:acm:us-east-1:275675788467:certificate/6f040252-509a-497d-ad93-df6b0fb062f2"
+  }
 }
