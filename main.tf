@@ -94,7 +94,7 @@ resource "aws_amplify_app" "example" {
   }
 }
 
-resource "aws_amplify_domain_association" "example" {
+/*resource "aws_amplify_domain_association" "example" {
   app_id      = aws_amplify_app.example.id
   domain_name = "iowattqa.com"
 
@@ -108,4 +108,4 @@ resource "aws_amplify_domain_association" "example" {
     type = "CUSTOM"
     custom_certificate_arn = "arn:aws:acm:us-east-1:275675788467:certificate/6f040252-509a-497d-ad93-df6b0fb062f2"
   }
-}
+}*/
