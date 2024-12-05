@@ -47,7 +47,7 @@ resource "aws_iam_role_policy_attachment" "attach_policy_1" {
   policy_arn = aws_iam_policy.policy_amplify_app_logs.arn
 }
 
-resource "aws_iam_role_policy_attachment" "attach_policy_1" {
+resource "aws_iam_role_policy_attachment" "attach_policy_2" {
   role       = aws_iam_role.amplify_app_role.name
   policy_arn =  "arn:aws:iam::aws:policy/service-role/AmplifyBackendDeployFullAccess"
 }
