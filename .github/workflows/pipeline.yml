@@ -46,6 +46,8 @@ jobs:
             -backend-config="encrypt=true" || exit 1
       - name: terraform plan
         id: plan
+        env:
+          TF_VAR_my_link: ${{ secrets.DEPLOY_GITHUB_ACCESS_TOKEN }}
         run: terraform plan -input=false -compact-warnings -var-file=prod.tfvars -out=tfplan
       - name: terraform show
         id: show
