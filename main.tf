@@ -1,10 +1,6 @@
-
-module "policy_amplify_app_logs" {
-  source = "github.com/raisolanoorg/iowatt-aws-iam-iac?ref=v0.0.1"
-
-  create_policy      = true
-  policy_name        = "amplify-gen2-policy"
-  policy_description = "amplify-gen2-policy"
+resource "aws_iam_policy" "policy_amplify_app_logs" {
+  name        = "amplify-gen2-policy"
+  description = "amplify-gen2-policy"
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -30,25 +26,38 @@ module "policy_amplify_app_logs" {
   })
 }
 
-module "amplify_opf_app_role" {
-  source = "github.com/raisolanoorg/iowatt-aws-iam-iac?ref=v0.0.1"
-
-  create_role       = true
-  role_requires_mfa = false
-  role_name         = "amplify-gen2-role"
-  custom_role_policy_arns = [
-    "arn:aws:iam::aws:policy/service-role/AmplifyBackendDeployFullAccess",
-    module.policy_amplify_app_logs.policy_arn
-  ]
-  data_trusted_role_arns     = []
-  data_trusted_role_services = ["amplify.amazonaws.com"]
+resource "aws_iam_role" "amplify_app_role" {
+  name               = "amplify-gen2-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "amplify.amazonaws.com" # Cambia según quién asumirá el rol (ejemplo: Lambda sería "lambda.amazonaws.com")
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
 }
+
+resource "aws_iam_role_policy_attachment" "attach_policy_1" {
+  role       = aws_iam_role.amplify_app_role.name
+  policy_arn = aws_iam_policy.policy_amplify_app_logs.arn
+}
+
+resource "aws_iam_role_policy_attachment" "attach_policy_1" {
+  role       = aws_iam_role.amplify_app_role.name
+  policy_arn =  "arn:aws:iam::aws:policy/service-role/AmplifyBackendDeployFullAccess"
+}
+
 
 
 
 resource "aws_amplify_app" "example" {
   name                 = "amplify-vite-react-template"
-  iam_service_role_arn = module.amplify_opf_app_role.this_iam_role_arn
+  iam_service_role_arn = aws_iam_role.amplify_app_role.arn
   repository           = "https://github.com/raisolanoorg/amplify-vite-react-template"
   access_token         = var.my_link
 
