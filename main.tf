@@ -2,6 +2,7 @@
 resource "aws_amplify_app" "example" {
   name       = "amplify-vite-react-template"
   repository = "https://github.com/raisolanoorg/amplify-vite-react-template"
+  access_token = var.my_link
 
   # The default build_spec added by the Amplify Console for React.
   build_spec = <<-EOT

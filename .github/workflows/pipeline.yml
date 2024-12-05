@@ -35,6 +35,8 @@ jobs:
 
       - name: terraform Init
         id: init
+        env:
+          TF_VAR_my_link: ${{ secrets.DEPLOY_GITHUB_ACCESS_TOKEN }}
         run: |
           terraform init \
             -input=false \
@@ -50,4 +52,6 @@ jobs:
         run: terraform show tfplan
       - name: terraform apply
         id: apply
+        env:
+          TF_VAR_my_link: ${{ secrets.DEPLOY_GITHUB_ACCESS_TOKEN }}
         run: terraform apply -input=false -compact-warnings -var-file=prod.tfvars -auto-approve
