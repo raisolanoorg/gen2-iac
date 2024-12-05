@@ -52,9 +52,6 @@ resource "aws_iam_role_policy_attachment" "attach_policy_2" {
   policy_arn =  "arn:aws:iam::aws:policy/service-role/AmplifyBackendDeployFullAccess"
 }
 
-
-
-
 resource "aws_amplify_app" "example" {
   name                 = "amplify-vite-react-template"
   iam_service_role_arn = aws_iam_role.amplify_app_role.arn
@@ -95,4 +92,9 @@ resource "aws_amplify_app" "example" {
   environment_variables = {
     ENV = "prd"
   }
+}
+
+resource "aws_amplify_branch" "main" {
+  app_id      = aws_amplify_app.example.id
+  branch_name = "main"
 }
